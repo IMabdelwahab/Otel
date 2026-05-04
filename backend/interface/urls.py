@@ -19,4 +19,6 @@ from . import views
 urlpatterns = [
     path('', views.index ),
     path('index/', views.index ),
+    path('api-test/', views.apiTest ),
+    path('api-test/<int:age>', views.apiTest2 ),
 ]
