@@ -127,7 +127,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# JAZZMIN_SETTINGS = {
+JAZZMIN_SETTINGS = {
 #     # title of the window (Will default to current_admin_site.site_title if absent or None)
 #     "site_title": "Otel Admin",
 
@@ -152,8 +152,8 @@ STATIC_URL = 'static/'
 #     # Relative path to a favicon for your site, will default to site_logo if absent (ideally 32x32 px)
 #     "site_icon": None,
 
-#     "copyright": "Abdelwahab Baizou -- Otel",
-# }
+    "copyright": "Abdelwahab Baizou -- Otel",
+}
 JAZZMIN_UI_TWEAKS = {
     # "theme": "simplex",
     # "dark_mode_theme": "darkly",
