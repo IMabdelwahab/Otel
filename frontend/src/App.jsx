@@ -1,16 +1,16 @@
 import { use, useState, useContext, useEffect } from 'react'
-import { Route, Routes, BrowserRouter } from 'react-router-dom'
+import { Route, Routes, BrowserRouter, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import './App.css'
-
+import axios from 'axios'
+import Login from './pages/Login'
 function App() {
-  const [count, setCount] = useState(0)
-
+  
   return (
     <>
     <BrowserRouter>
       <Routes>
-        <Route path='' element={}/>
+        <Route path='' element={<Login/>}/>
       </Routes>
     </BrowserRouter>
     </>
