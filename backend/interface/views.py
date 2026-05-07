@@ -11,13 +11,49 @@ def index(request):
     return HttpResponse(client)
 
 @api_view(["GET"])
-def apiTest(request):
-    clients = Client.objects.all()
-    serializer = ClientSerializer(clients,many=True)
-    return Response(serializer.data)
+def apiGetTest(request):
+    if request.method == "GET":
+        clients = Client.objects.all().order_by("clientAge")
+        serializer = ClientSerializer(clients,many=True)
+        return Response(serializer.data)
+        
+@api_view(["GET","PUT","DELETE"])
+def apiGetTest2(request,name):
+    try :
+        client = Client.objects.get(clientName =  name)
+    except :
+        return Response({"data":None})
+    
+    if request.method == "GET":
+        serializer = ClientSerializer(client)
+        return Response(serializer.data)
+    elif request.method == "PUT":
+        serializer = ClientSerializer(client, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+    elif request.method == "DELETE":
+        client.delete()
+        return Response({"mission":"succefull"})
 
-@api_view(["GET"])
-def apiTest2(request,age):
-    clients = Client.objects.filter(clientAge =  age)
-    serializer = ClientSerializer(clients,many=True)
-    return Response(serializer.data)
+@api_view(["POST"])
+def apiPostTest(request):
+    if request.method == "POST":
+        serializer = ClientSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+       
+
+     
+# @api_view(["GET","POST"])
+# def apiGetTest(request,age):
+#     if request.method == "GET":
+#         clients = Client.objects.filter(clientAge =  age)
+#         serializer = ClientSerializer(clients,many=True)
+#         return Response(serializer.data)
+#     if request.method == "POST":
+#         serializer = ClientSerializer(data = request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)

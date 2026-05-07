@@ -4,4 +4,4 @@ from .models import *
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = ["clientName", "clientAge"]
+        fields = '__all__' # This includes all fields automatically

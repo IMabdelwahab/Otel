@@ -19,6 +19,7 @@ from . import views
 urlpatterns = [
     path('', views.index ),
     path('index/', views.index ),
-    path('api-test/', views.apiTest ),
-    path('api-test/<int:age>', views.apiTest2 ),
+    path('apiGetTest/', views.apiGetTest ),
+    path('apiGetTest2/<str:name>', views.apiGetTest2 ),
+    path('apiPostTest/', views.apiPostTest ),
 ]
