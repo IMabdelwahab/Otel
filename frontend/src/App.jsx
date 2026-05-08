@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form'
 import './App.css'
 import axios from 'axios'
 import Login from './pages/Login'
+import Home from './pages/Home'
+import NotFound from './pages/NotFound'
 function App() {
   
   return (
@@ -11,6 +13,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='' element={<Login/>}/>
+        <Route path='/home' element={<Home/>}/>
+
+        
+        <Route path='/*' element={<NotFound/>}/>
       </Routes>
     </BrowserRouter>
     </>
