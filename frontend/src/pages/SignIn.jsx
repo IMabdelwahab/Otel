@@ -3,14 +3,16 @@ import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import AmberButton from '../components/AmberButton'
 import { Eye, EyeOff } from 'lucide-react'
+import authContext from '../contexts/authContext'
 // import './App.css'
 import axios from 'axios'
 
 
-function Login() {
+function SignIn() {
     const [passInputType, setPassInputType] = useState("password")
     const {register, handleSubmit, formState : {errors}} = useForm()
     const navigate = useNavigate()
+    const {user,setUser,tokens,setTokens} = useContext(authContext)
     
     const changePassDispaly = (event)=>{
       event.preventDefault()
@@ -23,14 +25,25 @@ function Login() {
     }
 
     const validate = (data)=>{
-      if (data.username === data.password ){
-        navigate("/home")
-      }
+      axios.post("http://127.0.0.1:8000/api/token",{
+        "username" : data.username,
+        "password" : data.password
+      }).then((resp)=>{
+        if (resp.data.access){
+          setUser({
+            "username":data.username , 
+            "firstName":"" , 
+            "lastName":"" , 
+            "isAuth":true
+          })
+          setTokens({
+            "access":resp.data.access, 
+            "refresh":resp.data.refresh
+          })
+          navigate("/")
+        }
+      })
     }
-
-    useEffect(() => {
-      
-    }, [])
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center" >
@@ -106,4 +119,4 @@ function Login() {
   )
 }
 
-export default Login
+export default SignIn

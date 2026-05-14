@@ -1,3 +1,6 @@
 # backend
 python 3.10 or higher
-
+Django
+jazzmin
+django rest framework
+django cors headers
