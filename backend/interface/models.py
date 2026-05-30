@@ -69,6 +69,8 @@ class Pricing(models.Model):
     roomType     = models.CharField(max_length=10, choices=RoomType.choices)
     season       = models.CharField(max_length=15, choices=PricingSeason.choices)
     pricePerNight = models.DecimalField(max_digits=10, decimal_places=2)
+    def __str__(self):
+        return f"{self.roomType} - {self.season} : {self.pricePerNight}/night"
     
 class Room(models.Model):
     number      = models.CharField(max_length=10, unique=True)
@@ -95,16 +97,15 @@ class Reservation(models.Model):
     nombre_personnes = models.IntegerField()
     remise = models.DecimalField(max_digits=5,decimal_places=2,default=0)
     statut = models.CharField(max_length=20,choices=STATUS_CHOICES,default="confirmee")
-    heure_checkin = models.DateTimeField(blank=True,null=True)
-    heure_checkout = models.DateTimeField(blank=True,null=True)
+    # heure_checkin = models.DateTimeField(blank=True,null=True)
+    # heure_checkout = models.DateTimeField(blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
 class Facture(models.Model):
     reservation = models.OneToOneField(Reservation,on_delete=models.CASCADE,related_name="facture")
     montant_total = models.DecimalField(max_digits=10,decimal_places=2)
     remise_appliquee = models.DecimalField(max_digits=10,decimal_places=2,default=0)
-    details = models.TextField()
     date_facture = models.DateTimeField(auto_now_add=True)
-    payee = models.BooleanField(default=False)
+    payed = models.BooleanField(default=False)
     def __str__(self):
         return f"Facture #{self.id}"

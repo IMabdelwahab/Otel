@@ -1,15 +1,17 @@
 import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import AmberButton from '../components/AmberButton'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, X } from 'lucide-react'
 import authContext from '../contexts/authContext'
+import Background from '../components/Background'
+
 // import './App.css'
 import axios from 'axios'
 
 
 function SignIn() {
     const [passInputType, setPassInputType] = useState("password")
+    const [alertBanner, setAlertBanner] = useState(false)
     const {register, handleSubmit, formState : {errors}} = useForm()
     const navigate = useNavigate()
     const {user,setUser,tokens,setTokens} = useContext(authContext)
@@ -24,7 +26,11 @@ function SignIn() {
       }
     }
 
-    const validate = (data)=>{
+    useEffect(()=>{
+      document.title = "Sign In | Ôtel"
+    },[])
+
+    const validate = (data) => {
       axios.post("http://127.0.0.1:8000/api/token",{
         "username" : data.username,
         "password" : data.password
@@ -40,13 +46,25 @@ function SignIn() {
             "access":resp.data.access, 
             "refresh":resp.data.refresh
           })
-          navigate("/")
+          navigate("/dashboard")
+        }
+      }).catch( err =>{
+        if (err.response?.status === 401 || err.response?.status === 400) {
+          setAlertBanner(true)
+        } else {
+          alert("Something went wrong. Please try again.")
         }
       })
     }
-
   return (
     <div className="min-h-screen flex flex-col justify-center items-center" >
+      {
+        alertBanner &&
+        <div className='absolute top-5 left-5 bg-gray-300/50 p-5 rounded-xl text-xl text-red-700 flex'>
+          <div className='max-w-100'>Wrong Username or Password, try again !</div>
+          <X className='ml-5 text-black' onClick={()=> setAlertBanner(false)}/>
+        </div>
+      }
       <div className='font-bold w-fit mx-auto text-amber-800 text-5xl  py-5'>Ôtel</div>
       <div className='bg-white shadow-black shadow-2xl/20 rounded-2xl p-8 w-75 md:w-112.5 mx-auto '>
         <form action="" onSubmit={handleSubmit(validate)}>
@@ -101,20 +119,13 @@ function SignIn() {
                     <p className='text-red-500'>{errors.password.message}</p>}
                 </div>
                 <div className='my-7 max-w-100 bg-amber-400 text-amber-900 text-center py-2 text-xl rounded-md hover:font-medium' >
-                  <button type='submit'>Sign In</button>
+                  <button type='submit' className='active:font-extrabold'>Sign In</button>
                 </div>
             </div>
         </form>
       </div>
-    {/* Background */}
-    <div className='fixed inset-0 -z-1 pointer-events-none'>
-      <div className='absolute left-1/2 top-20 -translate-x-1/2 w-300 h-115 bg-linear-to-tr from-amber-600/40 to-transparent rounded-full blur-3xl' />
-      <div className='absolute right-12 bottom-10 w-105 h-55 bg-linear-to-bl from-amber-600/50 to-transparent rounded-full blur-3xl' />
-      {/* <div className='absolute left-12 bottom-10 w-105 h-55 bg-linear-to-bl from-amber-600/50 to-transparent rounded-full blur-3xl' /> */}
-    </div>
-    <div
-      className="absolute inset-0 -z-1 h-full w-full  bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[72px_72px]"
-    ></div> 
+      {/* Background */}
+      <Background></Background>
     </div>
   )
 }
